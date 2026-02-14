@@ -32,21 +32,7 @@ class VersionCheckerUtilsImpl @Inject constructor(
     var definition: JSONObject = versionDefinition.invoke()
 
     override fun triggerCheckVersion() {
-        val version: String? = AllowedVersions.findByApi(definition, Build.VERSION.SDK_INT)
-        val newVersionByApi = compareWithCurrentVersion(newVersion = version, currentVersion = config.get().VERSION_NAME)
-
-        // App expiration
-        if (newVersionByApi || config.get().isDev()) {
-            var endDate = sp.getLong(rh.gs(app.aaps.core.utils.R.string.key_app_expiration) + "_" + config.get().VERSION_NAME, 0)
-            AllowedVersions.findByVersion(definition, config.get().VERSION_NAME)?.let { dateAsString ->
-                AllowedVersions.endDateToMilliseconds(dateAsString)?.let { ed ->
-                    endDate = ed + T.days(1).msecs()
-                    sp.putLong(rh.gs(app.aaps.core.utils.R.string.key_app_expiration) + "_" + config.get().VERSION_NAME, endDate)
-                }
-            }
-            if (endDate != 0L) onExpireDateDetected(config.get().VERSION_NAME, endDate)
-        }
-
+        // Expiration check disabled
     }
 
     @Suppress("SameParameterValue")
