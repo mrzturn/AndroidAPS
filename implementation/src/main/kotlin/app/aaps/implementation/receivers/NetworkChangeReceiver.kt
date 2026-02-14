@@ -38,7 +38,8 @@ class NetworkChangeReceiver : DaggerBroadcastReceiver() {
         networks.forEach {
             val capabilities = cm.getNetworkCapabilities(it) ?: return@forEach
             event.wifiConnected = event.wifiConnected || (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+ || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH))
             event.mobileConnected = event.mobileConnected || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
             event.vpnConnected = event.vpnConnected || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
             // if (event.vpnConnected) aapsLogger.debug(LTag.CORE, "NETCHANGE: VPN connected.")
@@ -47,7 +48,7 @@ class NetworkChangeReceiver : DaggerBroadcastReceiver() {
                 val wifiInfo = wifiManager.connectionInfo
                 if (wifiInfo.supplicantState == SupplicantState.COMPLETED) {
                     event.ssid = StringUtils.removeSurroundingQuotes(wifiInfo.ssid)
-                    // aapsLogger.debug(LTag.CORE, "NETCHANGE: Wifi connected. SSID: ${event.connectedSsid()}")
+                    // aapsLogger.debug(LTag.CORE, "NETCHANGE: Wifi connected. SSID: ${event.connectedSsi    d()}")
                 }
             }
             if (event.mobileConnected) {
